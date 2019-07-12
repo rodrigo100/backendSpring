@@ -39,14 +39,14 @@ public class UsuarioController {
 		}
 		catch(DataAccessException e)
 		{
-			response.put("Mensaje","Error al consultar la base de datos");
-			response.put("Error",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put("error","Error al consultar la base de datos");
+			response.put("mensaje",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 		   
 			return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(user==null)
 		{
-			response.put("Error","El usuario con el ID: ".concat(id.toString()).concat(" No existe en la base de datos"));		   
+			response.put("mensaje","El usuario con el ID: ".concat(id.toString().concat(" No existe en la base de datos")));		   
 			return new ResponseEntity<Map<String, Object>>(response,HttpStatus.NOT_FOUND);
 		}
 				   
@@ -69,12 +69,12 @@ public class UsuarioController {
 		}
 		catch(DataAccessException e)
 		{
-			response.put("Mensaje:","Error al registrar en la base de datos");
-			response.put("Error:",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			response.put("mensaje","Error al registrar en la base de datos");
+			response.put("error",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 		   
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("Mensaje:","Usuario registrado ..!");
+		response.put("mensaje","Usuario registrado ..!");
 		response.put("Usuario",usuario);
 		
 		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
@@ -97,7 +97,7 @@ public class UsuarioController {
 				
 				if(usuarioActual==null)
 				{
-					response.put("Error","El usuario con el ID: ".concat(id.toString()).concat(" No existe en la base de datos"));		   
+					response.put("error","El usuario con el ID: ".concat(id.toString()).concat(" No existe en la base de datos"));		   
 					return new ResponseEntity<Map<String, Object>>(response,HttpStatus.NOT_FOUND);
 				}
 				try {
@@ -112,13 +112,13 @@ public class UsuarioController {
 				}
 				catch(DataAccessException e)
 				{
-					 response.put("Mensaje:", "No se pudo realizar la actualizacion en la base de datos");
-					 response.put("Error:",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+					 response.put("mensaje", "No se pudo realizar la actualizacion en la base de datos");
+					 response.put("error",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 					 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 					
 				}
 				
-				response.put("Mensaje:","Usuario Actualizado ..!");
+				response.put("mensaje","Usuario Actualizado ..!");
 				response.put("usuario",usuarioActulizado);
 				return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CREATED);
 				
@@ -141,14 +141,14 @@ public class UsuarioController {
 		}
 		catch(DataAccessException e)
 		{
-			 response.put("Mensaje:", "No se pudo realizar la eliminacion en la base de datos");
-			 response.put("Error:",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			 response.put("mensaje", "No se pudo realizar la eliminacion en la base de datos");
+			 response.put("error",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 			
 			
 		}
 		
-		response.put("Mensaje:","El usuario fue eliminado ..!");
+		response.put("mensaje","El usuario fue eliminado ..!");
 		 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK);
 		
 	}

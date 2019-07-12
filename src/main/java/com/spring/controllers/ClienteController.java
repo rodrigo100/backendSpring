@@ -47,27 +47,36 @@ public class ClienteController {
 	@GetMapping("/clientes/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id)
 	{
-	    Cliente client =null;
-		Map<String, Object> response = new HashMap<>(); 
-		
-		
+	   
+		Cliente cliente = null;
+
+		Map<String, Object> response = new HashMap<>();
+
 		try {
-			client= clienteService.showCliente(id);
+
+		   cliente  = clienteService.showCliente(id);
+
+		} catch(DataAccessException e){
+
+		response.put("mensaje", "!Error al realizar la consulta en la base de datos!");
+
+		response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+
 		}
-		catch(DataAccessException e)
-		{
-			 response.put("Error:", "No se pudo conectar con la base de datos");
-			 response.put("Mensaje:",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-			 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
-			
+
+		if (cliente == null) {
+
+		response.put("mensaje", "El cliente con ID:".concat(id.toString().concat(" No se encuentra en la base de datos")));
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND );
+
 		}
-		if(client ==null)
-		{ 
-			 response.put("Error:", "El cliente con ID:".concat(id.toString().concat(" No se encuentra en la base de datos")));
-			 return new ResponseEntity<	Map<String, Object>>(response,HttpStatus.NOT_FOUND);
-		}
-		
-		return new ResponseEntity<Cliente>(client,HttpStatus.OK);
+
+		return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
+
+
 		
 	}
 	
@@ -85,13 +94,13 @@ public class ClienteController {
 		}
 		catch(DataAccessException e)
 		{
-			 response.put("Mensaje:", "No se pudo realizar el registro en la base de datos");
-			 response.put("Error:",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			 response.put("error", "No se pudo realizar el registro en la base de datos");
+			 response.put("mensaje",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 			
 		}
-		 response.put("Mensaje:", "Cliente registrado ..!");
-		 response.put("cliente:",clientNew);
+		 response.put("mensaje", "Cliente registrado ..!");
+		 response.put("cliente",clientNew);
 		return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
 		
 	}
@@ -109,7 +118,7 @@ public class ClienteController {
 		
 		if(clienteActual==null)
 		{
-			response.put("Error:", "El cliente con ID:".concat(id.toString().concat(" No se encuentra en la base de datos")));
+			response.put("error", "El cliente con ID:".concat(id.toString().concat(" No se encuentra en la base de datos")));
 			 return new ResponseEntity<	Map<String, Object>>(response,HttpStatus.NOT_FOUND);
 			
 		}
@@ -124,14 +133,14 @@ public class ClienteController {
 		}
 		catch(DataAccessException e)
 		{
-			 response.put("Mensaje:", "No se pudo realizar la actualizacion en la base de datos");
-			 response.put("Error:",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			 response.put("error", "No se pudo realizar la actualizacion en la base de datos");
+			 response.put("mensaje",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 			
 		}
 		
-		 response.put("Mensaje:", "Cliente actualizado ..!");
-		 response.put("cliente:",clienteActualizado);
+		 response.put("mensaje", "Cliente actualizado ..!");
+		 response.put("cliente",clienteActualizado);
 		
 		 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
 		
@@ -150,12 +159,12 @@ public class ClienteController {
 		}
 		catch(DataAccessException e)
 		{	
-			 response.put("Mensaje:", "No se pudo realizar la eliminacion en la base de datos");
-			 response.put("Error:",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			 response.put("error", "No se pudo realizar la eliminacion en la base de datos");
+			 response.put("mensaje",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
 			 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);	
 			
 		}
-		 response.put("Mensaje:", "Cliente eliminado ..!");
+		 response.put("mensaje", "Cliente eliminado ..!");
 		 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK);
 	
 		
