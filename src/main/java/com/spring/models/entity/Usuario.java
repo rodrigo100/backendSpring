@@ -12,12 +12,15 @@ public class Usuario implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(nullable=false)
 	private String nombre;
 	@Column(name = "ap_paterno")
 	private String apellidoPaterno;
 
 	@Column(name = "ap_materno")
 	private String apellidoMaterno;
+	@Column(nullable=false)
+	private Long edad;
 	private String sexo;
 	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE)
@@ -59,6 +62,16 @@ public class Usuario implements Serializable {
 
 	public void setApellidoMaterno(String apellidoMaterno) {
 		this.apellidoMaterno = apellidoMaterno;
+	}
+
+	
+	
+	public Long getEdad() {
+		return edad;
+	}
+
+	public void setEdad(Long edad) {
+		this.edad = edad;
 	}
 
 	public String getSexo() {

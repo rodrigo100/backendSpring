@@ -63,7 +63,7 @@ public class ClienteController {
 		}
 		if(client ==null)
 		{ 
-			 response.put("Error:", "El cliente con ID:".concat(id.toString().concat(",No se encuentra en la base de datos")));
+			 response.put("Error:", "El cliente con ID:".concat(id.toString().concat(" No se encuentra en la base de datos")));
 			 return new ResponseEntity<	Map<String, Object>>(response,HttpStatus.NOT_FOUND);
 		}
 		
@@ -109,7 +109,7 @@ public class ClienteController {
 		
 		if(clienteActual==null)
 		{
-			response.put("Error:", "El cliente con ID:".concat(id.toString().concat(",No se encuentra en la base de datos")));
+			response.put("Error:", "El cliente con ID:".concat(id.toString().concat(" No se encuentra en la base de datos")));
 			 return new ResponseEntity<	Map<String, Object>>(response,HttpStatus.NOT_FOUND);
 			
 		}
@@ -135,7 +135,7 @@ public class ClienteController {
 		
 		 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
 		
-		
+	 	
 		
 	}
 	
