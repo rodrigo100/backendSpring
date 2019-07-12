@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import com.spring.models.entity.Cliente;
 import com.spring.models.services.ClienteServices;
 
+
+/*probando la clase si sube los cambios a Git*/
 @CrossOrigin(origins= {"http://localhost:4200","http://localhost:8081"})
 @RestController
 @RequestMapping("/api/v1")
@@ -34,7 +36,7 @@ public class ClienteController {
 		return clienteService.allUsers();
 		/*Llega a consultar al metodo del CrudRepository->distintos metodos, como findAll() */
 //		return (List<Cliente>) clienteDao.findAll();
-		
+ 		
 	}
 	@GetMapping("/clientes/{id}")
 	public Cliente show(@PathVariable Long id)
