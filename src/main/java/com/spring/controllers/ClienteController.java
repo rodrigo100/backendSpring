@@ -2,12 +2,9 @@ package com.spring.controllers;
 
 import java.util.HashMap;
 import java.util.List;
-<<<<<<< HEAD
-//hola
-=======
+
 import java.util.Map;
 
->>>>>>> 1814a7f3e5fe0224c753cfe87f0ac40d82ec4cd7
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
