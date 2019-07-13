@@ -1,9 +1,13 @@
 package com.spring.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.spring.models.entity.Usuario;
@@ -24,37 +28,129 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("/usuarios/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public Usuario show(@PathVariable Long id)
+//	@ResponseStatus(HttpStatus.OK)
+	
+	public ResponseEntity<?> show(@PathVariable Long id)
 	{
-		return userService.showUser(id);
+		Usuario user=null;
+		Map<String, Object> response = new HashMap<>();
+		try {
+			user=userService.showUser(id);
+		}
+		catch(DataAccessException e)
+		{
+			response.put("error","Error al consultar la base de datos");
+			response.put("mensaje",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+		   
+			return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if(user==null)
+		{
+			response.put("mensaje","El usuario con el ID: ".concat(id.toString().concat(" No existe en la base de datos")));		   
+			return new ResponseEntity<Map<String, Object>>(response,HttpStatus.NOT_FOUND);
+		}
+				   
+		return new ResponseEntity<Usuario>(user,HttpStatus.OK);
 	}
+	
+	
+	
 	
 	@PostMapping("/usuarios")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Usuario create(@RequestBody Usuario user)
+//	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<?> create(@RequestBody Usuario user)
 	{
 		
-		return userService.storeUser(user);	
-	}
-	@PutMapping("/usuarios/{id}")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Usuario update(@RequestBody Usuario user,@PathVariable Long id)
-	{
-		Usuario userRequired = userService.showUser(id);
-		userRequired.setNombre(user.getNombre());
-		userRequired.setApellidoPaterno(user.getApellidoPaterno());
-		userRequired.setApellidoMaterno(user.getApellidoMaterno());
-		userRequired.setSexo(user.getSexo());
+		Usuario usuario=null;
+		Map<String, Object> response = new HashMap<>();
 		
-		return userService.storeUser(userRequired);
+		try {
+			usuario=userService.storeUser(user);
+		}
+		catch(DataAccessException e)
+		{
+			response.put("mensaje","Error al registrar en la base de datos");
+			response.put("error",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+		   
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		response.put("mensaje","Usuario registrado ..!");
+		response.put("Usuario",usuario);
+		
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+		
 	}
 	
-	@DeleteMapping("/usuarios/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void destroy(@PathVariable Long id)
+	
+	
+	
+	
+
+	@PutMapping("/usuarios/{id}")
+//	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<?> update(@RequestBody Usuario user,@PathVariable Long id)
 	{
-		userService.deleteUser(id);
+		
+				Usuario usuarioActual= userService.showUser(id);
+				Usuario usuarioActulizado=null;
+				Map<String, Object> response = new HashMap<>();
+				
+				if(usuarioActual==null)
+				{
+					response.put("error","El usuario con el ID: ".concat(id.toString()).concat(" No existe en la base de datos"));		   
+					return new ResponseEntity<Map<String, Object>>(response,HttpStatus.NOT_FOUND);
+				}
+				try {
+					
+					usuarioActual.setNombre(user.getNombre());
+					usuarioActual.setApellidoPaterno(user.getApellidoPaterno());
+					usuarioActual.setApellidoMaterno(user.getApellidoMaterno());
+					usuarioActual.setEdad(user.getEdad());
+					usuarioActual.setSexo(user.getSexo());
+					
+					usuarioActulizado= userService.storeUser(usuarioActual);
+				}
+				catch(DataAccessException e)
+				{
+					 response.put("mensaje", "No se pudo realizar la actualizacion en la base de datos");
+					 response.put("error",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+					 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+					
+				}
+				
+				response.put("mensaje","Usuario Actualizado ..!");
+				response.put("usuario",usuarioActulizado);
+				return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CREATED);
+				
+		
+		
+	}
+	
+	
+	
+	
+	
+	@DeleteMapping("/usuarios/{id}")
+//	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public ResponseEntity<?> destroy(@PathVariable Long id)
+	{
+		
+		Map<String, Object> response =new HashMap<>();
+		try {
+			userService.deleteUser(id);
+		}
+		catch(DataAccessException e)
+		{
+			 response.put("mensaje", "No se pudo realizar la eliminacion en la base de datos");
+			 response.put("error",e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+			
+			
+		}
+		
+		response.put("mensaje","El usuario fue eliminado ..!");
+		 return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK);
+		
 	}
 	
 	
