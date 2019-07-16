@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+
+//import org.springframework.format.annotation.NumberFormat;
+
+import javax.validation.constraints.*;
 
 @Entity
 @Table(name="usuarios")
@@ -12,15 +17,28 @@ public class Usuario implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotEmpty
+	@Size(min=3, max=15)
 	@Column(nullable=false)
 	private String nombre;
+	
+	@NotEmpty
+	@Size(min=4, max=10)
 	@Column(name = "ap_paterno")
 	private String apellidoPaterno;
 
+	@NotEmpty
+	@Size(min=4, max=10)
 	@Column(name = "ap_materno")
 	private String apellidoMaterno;
 	@Column(nullable=false)
+	
+//	@Digits(integer=5,fraction=0)
+//	@Pattern(regexp="\\\\d{2}")
 	private Long edad;
+	 
+	@NotEmpty
 	private String sexo;
 	@Column(name = "create_at")
 	@Temporal(TemporalType.DATE)

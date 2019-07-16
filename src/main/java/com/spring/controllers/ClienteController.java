@@ -1,13 +1,19 @@
 package com.spring.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 //import com.spring.models.dao.ClienteDao;
@@ -84,10 +90,24 @@ public class ClienteController {
 	
 	@PostMapping("/clientes")
 //	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> create(@RequestBody Cliente cliente)
+	public ResponseEntity<?> create(@Valid @RequestBody Cliente cliente, BindingResult resultadoErrores)
 	{
 		Cliente clientNew =null;
 		Map<String, Object> response = new HashMap<>();
+		
+		
+		//manejo de errores
+		if(resultadoErrores.hasErrors())
+		{
+		   List<String> error =resultadoErrores.getFieldErrors()
+				   .stream()
+				   .map(err -> "El campo: "+err.getField() +", "+ err.getDefaultMessage())
+				   .collect(Collectors.toList());
+		   
+		
+		   			response.put("errors",error);
+		 			return new ResponseEntity<Map<String, Object>>(response,HttpStatus.BAD_REQUEST);
+		}
 		try
 		{
 			clientNew = clienteService.storeCliente(cliente); 
@@ -110,12 +130,24 @@ public class ClienteController {
 	 
 	@PutMapping("/clientes/{id}")
 //	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> update(@RequestBody Cliente cliente, @PathVariable Long id)
+	public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, BindingResult resultadoErrores , @PathVariable Long id)
 	{
 		Cliente clienteActual=  clienteService.showCliente(id);
 		Map<String, Object> response = new HashMap<>();
 		Cliente clienteActualizado=null;
 		
+	//manejo de errores
+			if(resultadoErrores.hasErrors())
+			{
+			   List<String> error =resultadoErrores.getFieldErrors()
+					   .stream()
+					   .map(err -> "El campo: "+err.getField() +", "+ err.getDefaultMessage())
+					   .collect(Collectors.toList());
+			   
+			
+			   			response.put("errors",error);
+			 			return new ResponseEntity<Map<String, Object>>(response,HttpStatus.BAD_REQUEST);
+			}
 		if(clienteActual==null)
 		{
 			response.put("error", "El cliente con ID:".concat(id.toString().concat(" No se encuentra en la base de datos")));
