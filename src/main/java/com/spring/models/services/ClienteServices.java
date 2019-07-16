@@ -8,7 +8,8 @@ public interface ClienteServices {
 
 	
 	
-	public List<Cliente> allUsers();
+	public List<Cliente> allClientes();
+	
 	public Cliente showCliente(Long id);
 	public Cliente storeCliente(Cliente cliente);	
 	public void deleteCliente(Long id);

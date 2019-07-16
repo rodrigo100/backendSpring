@@ -18,10 +18,11 @@ public class ClienteServicesImplement implements ClienteServices {
 
 //	@Transactional(readOnly = true)
 	@Override
-	public List<Cliente> allUsers() {
+	public List<Cliente> allClientes() {
 		// TODO Auto-generated method stub
 		return (List<Cliente>) clienteDao.findAll();
 	}
+	
 
 	@Override
 	public Cliente showCliente(Long id) {
@@ -40,6 +41,8 @@ public class ClienteServicesImplement implements ClienteServices {
 		// TODO Auto-generated method stub
 		 clienteDao.deleteById(id);
 	}
+
+	
 
 
 }

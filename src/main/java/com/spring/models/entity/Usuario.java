@@ -19,7 +19,7 @@ public class Usuario implements Serializable {
 	private Long id;
 	
 	@NotEmpty
-	@Size(min=3, max=15)
+	@Size(min=3, max=15 )
 	@Column(nullable=false)
 	private String nombre;
 	

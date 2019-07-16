@@ -16,16 +16,18 @@ public class Cliente implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotEmpty
-	@Size(min=3, max=15)
+	@NotEmpty(message="no debe estar vacio")
+	@Size(min=3, max=15, message="debe contener minimo 3 y maximo 15 caracteres")
 	@Column(nullable=false)
 	private String nombre;
 	
-	@NotEmpty
+	@NotEmpty(message="no debe estar vacio")
 	private String apellido;
 	
-	@NotEmpty
-	@Email
+	@NotEmpty(message="no debe estar vacio")
+	@Email(message="debe presentar un formato valido")
+//	@UniqueElements(message="ya existe un registro con la misma contrasenia")
+	
 	@Column(nullable=false, unique=true)
 	private String email;
 	

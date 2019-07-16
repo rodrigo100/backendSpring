@@ -1,11 +1,9 @@
 package com.spring.controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -44,11 +42,16 @@ public class ClienteController {
 	public List<Cliente> index()
 	{
 //		return clienteService.findAll();
-		return clienteService.allUsers();
+	return clienteService.allClientes();
 		/*Llega a consultar al metodo del CrudRepository->distintos metodos, como findAll() */
 //		return (List<Cliente>) clienteDao.findAll();
+		
+		
+		
  		
 	}
+	
+
 	
 	
 	@GetMapping("/clientes/{id}")
